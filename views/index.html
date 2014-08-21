@@ -1,0 +1,52 @@
+<html>
+  <head>
+    <title>Project Euler Sandbox</title>
+
+    <script type="text/javascript" src="/javascripts/libraries/jquery-prod.js"></script>
+    <script type="text/javascript" src="/javascripts/libraries/underscore-prod.js"></script>
+    <script type="text/javascript" src="/javascripts/libraries/underscore.string-prod.js"></script>
+    <script type="text/javascript" src="/javascripts/libraries/handlebars-v1.3.0.js"></script>
+  </head>
+
+  <body>
+    <h1 style="text-align:center;">It's pronounced OILER!</h1>
+
+    <div id="problems">
+
+    </div>
+
+    <script id="problem-template" type="text/x-handlebars-template">
+      <div id="{{id}}">
+        <button>{{name}}</button><br>
+        <textarea readonly="true">Result</textarea>
+        <script src="/javascripts/euler/{{filename}}"></script>
+     </div>
+    </script>
+
+    <script type="text/javascript">
+      $(function() {
+        // Use underscore.string plugin
+        _.mixin(_.str.exports());
+
+        // Create global list of Euler problem objects (id + name), 1 per each file
+        var filenames = ['01_multiples_of_3_and_5.js'],
+        regex = /^(\d{2,3})_(.+)$/,
+          template_source = $("script#problem-template" ).html(),
+          template = Handlebars.compile(template_source),
+          $problems = $('#problems');
+
+        // Render each problem on the page
+        _.map(filenames, function(filename) {
+          var info = regex.exec(filename),
+          id = info[1],
+          name = _.capitalize(info[2].replace(/_|\.js/g, " ").trim()),
+          problem = {filename: filename, id: id, name: name};
+
+          $problems.append(template(problem));
+          console.log(window.location.pathname);
+        });
+      });
+    </script>
+
+  </body>
+</html>
